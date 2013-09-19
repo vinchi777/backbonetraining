@@ -110,11 +110,11 @@
         </div>
     </body>
     <script type="text/template" id="contact_template">
-		<td><%= position %></td>
+		<td ><%= position %></td>
         <td><%= name %></td>
         <td><%= number %></td>
         <td><%= username %></td>
-        <td class="controls"><a href="#" class="edit">Edit</a> | <a href="#" class="delete">Delete</a></td>
+        <td class="controls"><a href="#" class="edit" id="<%= _id %>" >Edit</a> | <a href="#" class="delete" id="<%= _id %>">Delete</a></td>
     </script>
     <script type="text/template" id="edit_mode_template">
         <td></td>

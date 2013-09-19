@@ -15,24 +15,25 @@
 		},
 		addPerson: function (evt) {
 
-			var person = new PersonModel({
+			var person = new PersonModel();
+			this.collection.add(person);
+
+			var data = {
 				name: this.input_name.val(),
 				number: this.input_number.val(),
 				username: this.input_username.val(),
-				position: ""
-			});
-
-			this.collection.add(person);
-			person.set("position", this.collection.length);
-			person.save({
+				position: this.collection.length
+			};
+			var _contacts_list = this.contacts_list	
+			person.save( data, {
 				success: function(model, response){
 					alert("saved");	
 					console.log(response);
 					var view = new PersonView({model: model});
-					this.contacts_list.append(view.render().el);
+					_contacts_list.append(view.render().el);
 				},
-				error: function(){
-					alert("error");	
+				error: function(e){
+					alert(e.message);	
 				}
 			});
 
@@ -52,8 +53,8 @@
 	});
 
 	var PersonCollection = Backbone.Collection.extend({
+		urlRoot: "http://localhost:9090/persons",
 		model: PersonModel,
-		url: '/contacts',
 		initialize: function () {
 
 		}
@@ -74,16 +75,18 @@
 			this.$el.html(compiledTemplate(this.model.toJSON()))
 			return this;
 		},
-		remove: function() {
+		remove: function(env) {
 			
+			var id = $(env.target).attr("id");
+			var person = new PersonModel({id: id});
+			person.destroy({ success: function(model, response){
+				$(env.target).closest("tr").fadeOut();	
+			}});
 		},
 		edit: function(){
-
+			
 		}
 	});
-
-	var contactApp = new App({collection: new PersonCollection()});
-
-
+	var contactApp = new App({collection: new PersonCollection() });
 
 })(jQuery, Backbone, _)

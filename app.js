@@ -19,9 +19,9 @@ fs.readdirSync(models_path).forEach(function (file){
 })
 
 app.all('*', function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  res.header("Content-Type", "application/json");
+	res.header('Access-Control-Allow-Origin', req.headers.origin || "*");
+	res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,HEAD,DELETE,OPTIONS');
+	res.header('Access-Control-Allow-Headers', 'content-Type,x-requested-with');
   next();
 });
 
@@ -47,8 +47,8 @@ var person = require('./routes/person');
 app.get('/', routes.index);
 app.get('/persons', person.list);
 app.post('/persons', person.create);
-app.put('/persons', person.update);
-app.delete('/persons', person.destroy);
+app.put('/persons/:id', person.update);
+app.delete('/persons/:id', person.destroy);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
